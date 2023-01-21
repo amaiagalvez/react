@@ -13,3 +13,9 @@ export const WINNER_COMBOS = [
     [0, 4, 8],
     [2, 4, 6],
 ]
+
+export const INITIAL_BOARD = Array(9).fill(null)
+
+export const INITIAL_TURN = TURNS.X
+
+export const INITIAL_WINNER = null

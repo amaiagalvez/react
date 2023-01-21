@@ -1,4 +1,4 @@
-import { WINNER_COMBOS } from './constants'
+import { TURNS, WINNER_COMBOS } from './constants'
 
 export const checkWinner = (boardToCheck) => {
     for (const combo of WINNER_COMBOS) {
@@ -16,4 +16,8 @@ export const checkWinner = (boardToCheck) => {
 
 export const checkEndGame = (newBoard) => {
     return newBoard.every((square) => square !== null)
+}
+
+export const checkNewTurn = (turn) => {
+    return turn === TURNS.X ? TURNS.O : TURNS.X
 }
