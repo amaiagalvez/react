@@ -36,7 +36,8 @@ export function TwitterFollowCard({ children, formatUserName, userName = 'unknow
             </header>
             <aside>
                 <button className={buttonClassName} onClick={handleClick} title={buttonText}>
-                    {buttonText} {/* Children. Hijo del elemento button */}
+                    <span className="tw-followCard-text">{buttonText}</span> {/* Children. Hijo del elemento button */}
+                    <span className="tw-followCard-stopFollow">Utzi Jarraitzen</span>
                 </button>
             </aside>
         </article>  
