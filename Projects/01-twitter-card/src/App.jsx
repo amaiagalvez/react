@@ -6,6 +6,21 @@ export function App() {
     
     const amaia = { initialIsFollowing: false, formatUserName: formatUserName, userName: "amaiagalvez" } 
     
+    const users = [
+        {
+            uuid: 1,
+            name: 'Izena 1',
+            userName: 'name1',
+            isFollowing: true
+        },
+        {
+            uuid: 2,
+            name: 'Izena 2',
+            userName: 'name2',
+            isFollowing: false
+        }
+    ]
+
     return (
         <section className="App">
             <TwitterFollowCard {...amaia}> {/* rest operation */}
@@ -28,6 +43,20 @@ export function App() {
             <TwitterFollowCard
                 formatUserName={formatUserName}>
             </TwitterFollowCard>
+
+            {
+                users.map(({uuid, name, userName, isFollowing}) => (
+                    
+                    <TwitterFollowCard
+                        key={uuid}
+                        formatUserName={formatUserName} 
+                        userName={userName}
+                        initialIsFollowing={isFollowing}>
+                        {name}                            
+                    </TwitterFollowCard>
+                ))
+            }
+
         </section>
     )
 }
