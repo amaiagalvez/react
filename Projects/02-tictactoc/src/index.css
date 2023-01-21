@@ -130,3 +130,12 @@ body {
   cursor: pointer;
   font-size: 48px;
 }
+
+.time {
+  float: right;
+  font-size: 0.5rem;
+  color: #fff;
+  background-color: rgb(255, 0, 0);
+  padding: 0px 2px 0px 2px;
+  border-radius: 10px;
+}

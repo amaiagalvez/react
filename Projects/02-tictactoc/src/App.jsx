@@ -1,66 +1,20 @@
 import { useState } from 'react'
 import conffety from 'canvas-confetti'
 import './App.css'
-
-const TURNS = {
-    X: '❌',
-    O: '🔘'
-}
-
-const WINNER_COMBOS = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6],
-]
-
-const Square = ({ children, isSelected, updateBoard, index }) => {
-    
-    const className = `square ${isSelected ? 'is-selected' : ''}`
-
-    const handleClick = () => {
-        updateBoard(index)
-    }
-
-    return (
-        <div className={className} onClick={handleClick}>
-            {children}
-        </div>
-    )
-}
+import { Square } from './components/Square'
+import { TURNS } from './logic/constants'
+import { checkWinner, checkEndGame } from './logic/board'
+import { WinnerModal } from './components/WinnerModal'
 
 function App() {
     const [board, setBoard] = useState(Array(9).fill(null));
     const [turn, setTurn] = useState(TURNS.X)
     const [winner, setWinner] = useState(null) /* null - no hay ganador, false - empate */
     
-    const checkWinner = (boardToCheck) => {
-        for (const combo of WINNER_COMBOS) {
-            const [a, b, c] = combo 
-            if (boardToCheck[a] && 
-                boardToCheck[a] === boardToCheck[b] &&
-                boardToCheck[a] === boardToCheck[c]) {
-                    //the winner is
-                     return boardToCheck[a]
-                }
-        }
-
-        //si no hay ganador
-        return null
-    }
-
     const resetGame = () => {
         setBoard(Array(9).fill(null))
         setTurn(TURNS.X)
         setWinner(null)
-    }
-
-    const checkEndGame = (newBoard) => {
-        return newBoard.every((square) => square !== null)
     }
 
     const updateBoard = (index) => {
@@ -83,7 +37,7 @@ function App() {
             setWinner(newWinner) //Adi!! La ctualización del Estado es asincrona. No paraliza la ejecución
             //Aquí puede que el estado no esté actualizado, no puedo saber fijo que estado tiene "winner", puede que esté actualizado o no
             conffety()
-            
+
             setWinner((previousWinner) => {
                 //aquí se podría utilizar previousWinner para hacer alguna combinación del valor antiguo y del nuevo
               
@@ -94,8 +48,10 @@ function App() {
         }
     }
 
+    var today = new Date();
     return (
         <main className='board'>
+            <span className='time'>{today.toLocaleString()}</span>
             <h1>Tic tac toe</h1>
             <section className='game'>
             {
@@ -122,22 +78,7 @@ function App() {
                 </Square>
             </section>
 
-            {
-                winner !== null && (
-                    <section className='winner'>
-                        <div className='text'>
-                            <h2>{ winner === false ? 'Berdinketa' : 'Irabazlea: ' }
-                            </h2>
-                            <header className='win'>
-                                {winner && <Square>{winner}</Square>}
-                            </header>
-                            <footer>
-                                <button onClick={resetGame}>Hasi berriro</button>
-                            </footer>
-                        </div>
-                    </section>
-                )
-            }
+            <WinnerModal winner={winner} resetGame={resetGame} />
         </main>
     )        
 }
