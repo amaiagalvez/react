@@ -1,7 +1,7 @@
 import { TURNS } from '../logic/constants'
-import { Square } from ' ./Square'
+import { Square } from './Square'
 
-export function Turn ({turn}) {
+export function Turn ({ turn }) {
   return (
     <section className='turn'>
       <Square isSelected={turn === TURNS.X}>
