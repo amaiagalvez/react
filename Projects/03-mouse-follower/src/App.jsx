@@ -24,13 +24,24 @@ function App () {
       window.removeEventListener('pointermove', haddleMove)
     }
   }, [enabled])
-  // si no pongo esta ultima condición, este efecto se ejecutara cada vez que se renderiza la página
+  // [] => se ejecuta solo una vez cuando se monta el componente
+  // [dependencias] => se ejecuta cada vez que se monta el componente y cuando cambia la dependiendia
+  // si no pongo nada, este efecto se ejecutara cada vez que se renderiza el componente
+
+  useEffect(() => {
+    document.body.classList.toggle('no-cursor', enabled)
+
+    return () => {
+      document.body.classList.remove('no-cursor')
+    }
+  }, [enabled])
 
   return (
     <main>
       <div style={{
         position: 'absolute',
-        backgroundColor: '#09f',
+        backgroundColor: '#000',
+        border: '1px solid #fff',
         borderRadius: '50%',
         opacity: 0.8,
         pointerEvents: 'none',
@@ -42,7 +53,8 @@ function App () {
       }}
       />
 
-      <h3>Jaraitu</h3>
+      <h3>Jarraitu Punteroa</h3>
+
       <button onClick={() => setEnabled(!enabled)}>
         {enabled ? 'Desactivar' : 'Activar'} puntero
       </button>
