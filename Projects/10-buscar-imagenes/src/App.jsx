@@ -4,7 +4,7 @@ import './App.css'
 import { ImagesList } from './components/ImagesList'
 
 function App () {
-  const PER_PAGE = 30
+  const PER_PAGE = 12
 
   const [filter, setFilter] = useState(null)
   const [images, setImages] = useState(null)
@@ -21,7 +21,7 @@ function App () {
 
     fetch(url)
       .then(response => response.json())
-      .then(result => setImages(result.hits))
+      .then(result => setImages(result))
 
     scroll()
   }
@@ -44,16 +44,37 @@ function App () {
     fetchData(filter, newPage)
   }
 
-  const nextPage = (images) => {
+  const nextPage = () => {
     let newPage = page
 
-    if (images.length < PER_PAGE) return null
+    if (images && images.hits.length < PER_PAGE) return null
 
     newPage = page + 1
 
     setPage(newPage)
 
     fetchData(filter, newPage)
+  }
+
+  const firstPage = () => {
+    setPage(1)
+    fetchData(filter, 1)
+  }
+
+  function calculateTotalPageNumber() {
+    let totalPages = parseInt(images.totalHits / PER_PAGE)
+    if (images.totalHits / PER_PAGE > 0) {
+      totalPages++
+    }
+
+    return totalPages
+  }
+
+  const lastPage = () => {
+    const totalPages = calculateTotalPageNumber()
+
+    setPage(totalPages)
+    fetchData(filter, totalPages)
   }
 
   const scroll = () => {
@@ -88,14 +109,16 @@ function App () {
             </div>
         }
         {
-            filter && images && images.length > 0 &&
+            filter && images && images.hits.length > 0 &&
               <div className='row justify-content-center'>
                 <ImagesList
-                  images={images}
+                  images={images && images.hits}
                   page={page}
                   prevPage={prevPage}
                   nextPage={nextPage}
-                  isLast={images.length < PER_PAGE}
+                  isLast={images && page >= calculateTotalPageNumber()}
+                  firstPage={firstPage}
+                  lastPage={lastPage}
                 />
               </div>
         }
@@ -103,7 +126,7 @@ function App () {
 
       <div className='pt-2'>
         {
-          images && images.length === 0 &&
+          images && images.hits.length === 0 &&
             <h5 className='text-muted'>
               <span className='pr-5'>... Ez dugu ezer aurkitu. Saiatu berriro</span>
             </h5>

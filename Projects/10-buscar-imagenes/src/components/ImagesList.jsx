@@ -2,7 +2,7 @@ import React from 'react'
 import { Image } from './Image'
 import { Paginate } from './Paginate'
 
-export function ImagesList ({ images, page, prevPage, nextPage, isLast }) {
+export function ImagesList ({ images, page, prevPage, nextPage, isLast, firstPage, lastPage }) {
   return (
     <>
       <div className='col-12 p-4 row'>
@@ -22,6 +22,8 @@ export function ImagesList ({ images, page, prevPage, nextPage, isLast }) {
           prevPage={prevPage}
           nextPage={nextPage}
           isLast={isLast}
+          firstPage={firstPage}
+          lastPage={lastPage}
         />
       </div>
     </>
