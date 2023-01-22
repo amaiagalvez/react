@@ -23,7 +23,7 @@ export function Image ({ image }) {
               {views}
             </div>
           </div>
-
+          <p style={{ color: '#FF6C6C', fontSize: '0.8rem' }}>{tags}</p>
           <div className='text-center'>
             <a href={largeImageURL} rel='noreferrer' target='_blank' className='btn btn-sm btn-primary'>
               Irudia Ireki

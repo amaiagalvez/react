@@ -1,15 +1,19 @@
 import { React, useState } from 'react'
 
 export function SearchForm (props) {
-  const [filter, setFilter] = useState('')
+  const [search, setSearch] = useState(null)
 
   const handleChange = (e) => {
-    setFilter(e.target.value)
+    setSearch(e.target.value)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.onSubmit(filter)
+
+    // si no hay nada en el input no hacer caso al botón Search
+    if (search === null || search === '') return null
+
+    props.onSubmit(search)
   }
 
   return (
@@ -17,7 +21,7 @@ export function SearchForm (props) {
       <div className='row'>
         <div className='form-group col-md-8'>
           <input
-            name='filter' type='text' className='form-control' placeholder='Bilatu irudia. Adibidez: Futbol' value={filter}
+            name='search' type='text' className='form-control' placeholder='Bilatu irudia. Adibidez: Futbol' value={search}
             onChange={handleChange}
           />
         </div>

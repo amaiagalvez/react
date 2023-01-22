@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { SearchForm } from './components/SearchForm'
 import './App.css'
 import { ImagesList } from './components/ImagesList'
+import { saveSearchToStorage, getSearchStorage } from './storage/storage'
 
 function App () {
   const PER_PAGE = 12
@@ -9,11 +10,18 @@ function App () {
   const [filter, setFilter] = useState(null)
   const [images, setImages] = useState(null)
   const [page, setPage] = useState(1)
+  const [history, setHistory] = useState(getSearchStorage())
+
+  const reloadSearch = (item) => {
+    setFilter(item)
+    getData(item)
+  }
 
   const getData = (data) => {
     setFilter(data)
     setPage(1)
     fetchData(data)
+    setHistory(saveSearchToStorage(data))
   }
 
   const fetchData = (data, page = 1) => {
@@ -30,6 +38,9 @@ function App () {
     setFilter(null)
     setImages(null)
     setPage(1)
+    setHistory(getSearchStorage())
+
+    // cleanStorage()
     // TODO: nola garbitu formularioa?
   }
 
@@ -47,7 +58,7 @@ function App () {
   const nextPage = () => {
     let newPage = page
 
-    if (images && images.hits.length < PER_PAGE) return null
+    if (images && page >= calculateTotalPageNumber()) return null
 
     newPage = page + 1
 
@@ -61,7 +72,7 @@ function App () {
     fetchData(filter, 1)
   }
 
-  function calculateTotalPageNumber() {
+  function calculateTotalPageNumber () {
     let totalPages = parseInt(images.totalHits / PER_PAGE)
     if (images.totalHits / PER_PAGE > 0) {
       totalPages++
@@ -96,10 +107,30 @@ function App () {
 
       <div className='pt-2'>
         {
+          (filter === null || filter === '') &&
+            <div>
+              <h3 className='mt-5 text-center'> Bilaketa bat egin goiko formularioan edo ikusi historiala</h3>
+              <div className='text-center'>
+                {
+                  history.flatMap((item) => (
+                    // para que no se cargue cada vez que se renderiza la página y poder pasarle parametros
+                    <button className='btn btn-sm btn-secondary m-2 p-2 rounded-1' onClick={(e) => reloadSearch(item[0])} key={item[0]}>
+                      <strong>{item[0]}:</strong> {item[1]}
+                    </button>
+                  )
+                  )
+                }
+              </div>
+            </div>
+        }
+      </div>
+
+      <div className='pt-2'>
+        {
           filter && images &&
             <div>
               <h5 className='text-muted'>
-                <span className='pr-5'>Bilatzen ari gara:  {filter}</span>
+                <span className='pr-5'>Bilatzen ari gara: <i>"{filter}"</i> [{images.totalHits} irudi]</span>
                 <span className='text-muted btn btn-sm btn-primary close-button' title='Garbitu bilaketa' onClick={cleanSearch}>
                   <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='currentColor' className='bi bi-x' viewBox='0 0 16 16'>
                     <path d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z' />
