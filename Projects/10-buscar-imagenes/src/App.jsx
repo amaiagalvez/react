@@ -4,26 +4,61 @@ import './App.css'
 import { ImagesList } from './components/ImagesList'
 
 function App () {
+  const PER_PAGE = 30
+
   const [filter, setFilter] = useState(null)
   const [images, setImages] = useState(null)
+  const [page, setPage] = useState(1)
 
   const getData = (data) => {
     setFilter(data)
+    setPage(1)
     fetchData(data)
   }
 
-  const fetchData = (data) => {
-    const url = `https://pixabay.com/api/?key=15343816-9870b0db29149adf58f25a37c&q=${data}&per_page=30`
+  const fetchData = (data, page = 1) => {
+    const url = `https://pixabay.com/api/?key=15343816-9870b0db29149adf58f25a37c&q=${data}&per_page=${PER_PAGE}&page=${page}`
 
     fetch(url)
       .then(response => response.json())
       .then(result => setImages(result.hits))
+
+    scroll()
   }
 
   const cleanSearch = () => {
     setFilter(null)
     setImages(null)
+    setPage(1)
     // TODO: nola garbitu formularioa?
+  }
+
+  const prevPage = () => {
+    let newPage = page
+    if (page > 1) {
+      newPage = page - 1
+    }
+
+    setPage(newPage)
+
+    fetchData(filter, newPage)
+  }
+
+  const nextPage = (images) => {
+    let newPage = page
+
+    if (images.length < PER_PAGE) return null
+
+    newPage = page + 1
+
+    setPage(newPage)
+
+    fetchData(filter, newPage)
+  }
+
+  const scroll = () => {
+    const elem = document.querySelector('.jumbotron')
+    elem.scrollIntoView(true)
   }
 
   return (
@@ -42,7 +77,6 @@ function App () {
         {
           filter && images &&
             <div>
-              <h1 className='text-center'> Irudien Zerrenda</h1>
               <h5 className='text-muted'>
                 <span className='pr-5'>Bilatzen ari gara:  {filter}</span>
                 <span className='text-muted btn btn-sm btn-primary close-button' title='Garbitu bilaketa' onClick={cleanSearch}>
@@ -53,11 +87,16 @@ function App () {
               </h5>
             </div>
         }
-        {console.log(images)}
         {
             filter && images && images.length > 0 &&
-              <div>
-                <ImagesList images={images} />
+              <div className='row justify-content-center'>
+                <ImagesList
+                  images={images}
+                  page={page}
+                  prevPage={prevPage}
+                  nextPage={nextPage}
+                  isLast={images.length < PER_PAGE}
+                />
               </div>
         }
       </div>
