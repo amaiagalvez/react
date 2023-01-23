@@ -101,6 +101,8 @@ function App () {
 
           <SearchForm
             onSubmit={getData}
+            cleanSearch={cleanSearch}
+            filter={filter ?? null}
           />
         </div>
       </div>
@@ -110,16 +112,17 @@ function App () {
           (filter === null || filter === '') &&
             <div>
               <h3 className='mt-5 text-center'> Bilaketa bat egin goiko formularioan edo ikusi historiala</h3>
-              <div className='text-center'>
-                {
-                  history.flatMap((item) => (
-                    // para que no se cargue cada vez que se renderiza la página y poder pasarle parametros
-                    <button className='btn btn-sm btn-secondary m-2 p-2 rounded-1' onClick={(e) => reloadSearch(item[0])} key={item[0]}>
-                      <strong>{item[0]}:</strong> {item[1]}
-                    </button>
-                  )
-                  )
-                }
+              <div>
+                <ul>
+                  {
+                    history.flatMap((item) => (
+                      // para que no se cargue cada vez que se renderiza la página y poder pasarle parametros
+                      <li onClick={(e) => reloadSearch(item[0])} key={item[0]} style={{ cursor: 'pointer' }}>
+                        <strong>{item[0]}:</strong> {item[1]}
+                      </li>
+                    ))
+                  }
+                </ul>
               </div>
             </div>
         }
@@ -129,6 +132,12 @@ function App () {
         {
           filter && images &&
             <div>
+              <h5 className='text-muted'> Emaitza:
+                <span className='pr-5'> {images.totalHits} irudi</span>
+              </h5>
+
+              {/* TODO:  Argitu nola egin hau */}
+
               <h5 className='text-muted'>
                 <span className='pr-5'>Bilatzen ari gara: <i>"{filter}"</i> [{images.totalHits} irudi]</span>
                 <span className='text-muted btn btn-sm btn-primary close-button' title='Garbitu bilaketa' onClick={cleanSearch}>
