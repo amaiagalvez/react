@@ -38,3 +38,4 @@ Recupera un hecho (fact) aleatorio de gatos de la primera API y muestra una imag
 - Refactorizar
 - Test (el más importante es el test end-to-end)
 - Busquedas: mdn... separar (para buscar la documentación)
+- Primero reslover el "happy path" y luego ponerse con la gestión de errores

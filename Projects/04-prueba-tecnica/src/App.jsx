@@ -6,6 +6,9 @@ export function App() {
   const [fact, setFact] = useState()
   const [imageUrl, setImageUrl] = useState()
 
+  // gestion de errores
+  const [factError, setFactError] = useState()
+
   const URL_CAT_FACTS = 'https://catfact.ninja/fact'
 
   /*
@@ -14,15 +17,33 @@ export function App() {
    por eso usamos useEffect **sin dependencias** para que se ejecute solo la primera vez que se renderiza el componente (si no pongo nada se va a ejecutar siempre)
   */
 
-  useEffect(() => {
-    // useEffect es una función asíncrona (no se puede usar async away, habría que poner dentro una async function getRandomData() dentro)
-    // fetch - devuelta una promesa, obtenemos la respuesta y cogemos lo que nos hace falta del json actualizando el estado
+  const getRandomFact = () => {
     fetch(URL_CAT_FACTS)
+      // .then(res => {
+      //   if (!res.ok) throw new Error('Error fetching fact')
+
+      //   res.json()
+      // })
       .then(res => res.json())
       .then(data => {
         const { fact } = data
         setFact(fact)
       })
+  }
+
+  const handdleClick = () => {
+    getRandomFact()
+  }
+
+  useEffect(() => {
+    // useEffect es una función asíncrona (no se puede usar async away, habría que poner dentro una async function getRandomData() dentro)
+    // fetch - devuelta una promesa, obtenemos la respuesta y cogemos lo que nos hace falta del json actualizando el estado
+    getRandomFact()
+    // .catch((err) => {
+    //   // por defecto entra cuando hay un error en la petición
+    //   // con el throw => wntrará también si la respuesta no es 'ok'
+    //   setFactError('No se ha podido recuperar la cita')
+    // })
   }, [])
   // solo poner dependencias que pueden cambiar, entonces se ejecutará cada vez que cambie la dependencia
 
@@ -44,6 +65,10 @@ export function App() {
   return (
     <main style={{ width: '80%', display: 'flex', flexDirection: 'column', placeItems: 'center', maxWith: '800px', margin: '0 auto', fontFamily: 'system-ui' }}>
       <h1> App de gatitos</h1>
+
+      <button onClick={handdleClick}>
+        Cargar otra imagen
+      </button>
       {
         // renderizado condicional, solo si fact tiene algo
         fact &&
