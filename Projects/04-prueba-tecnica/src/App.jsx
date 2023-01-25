@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 import './App.css'
+import { getRandomFact } from './services/facts.js'
 
 export function App() {
   // para tener un Estado de la aplicación
@@ -9,36 +10,23 @@ export function App() {
   // gestion de errores
   const [factError, setFactError] = useState()
 
-  const URL_CAT_FACTS = 'https://catfact.ninja/fact'
-
   /*
    aquí no se puede hace directamente el fetching de datos
    lo que vaya aquí se ejecuta cada vez que se recarga el componente
    por eso usamos useEffect **sin dependencias** para que se ejecute solo la primera vez que se renderiza el componente (si no pongo nada se va a ejecutar siempre)
   */
 
-  const getRandomFact = () => {
-    fetch(URL_CAT_FACTS)
-      // .then(res => {
-      //   if (!res.ok) throw new Error('Error fetching fact')
-
-      //   res.json()
-      // })
-      .then(res => res.json())
-      .then(data => {
-        const { fact } = data
-        setFact(fact)
-      })
-  }
-
-  const handdleClick = () => {
-    getRandomFact()
+  const handdleClick = async () => {
+    const newFact = await getRandomFact(setFact)
+    setFact(newFact)
   }
 
   useEffect(() => {
     // useEffect es una función asíncrona (no se puede usar async away, habría que poner dentro una async function getRandomData() dentro)
     // fetch - devuelta una promesa, obtenemos la respuesta y cogemos lo que nos hace falta del json actualizando el estado
-    getRandomFact()
+
+    getRandomFact().then(newFact => setFact(newFact))
+
     // .catch((err) => {
     //   // por defecto entra cuando hay un error en la petición
     //   // con el throw => wntrará también si la respuesta no es 'ok'
@@ -57,6 +45,7 @@ export function App() {
     fetch(`https://pixabay.com/api/?key=15343816-9870b0db29149adf58f25a37c&q=${firstWord}`)
       .then(res => res.json())
       .then(response => {
+        if (!response.ok) return ''
         setImageUrl(response.hits[0].previewURL)
       })
   }, [fact])
