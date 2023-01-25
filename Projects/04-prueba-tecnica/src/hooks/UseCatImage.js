@@ -28,8 +28,7 @@ export function useCatImage({ fact }) {
   }, [fact])
   // este solo se ejecutará cuando fact cambie
 
-  //return { imageUrl: `${CAT_PREFIX_IMAGE_URL}${imageUrl}` }
+  // return { imageUrl: `${CAT_PREFIX_IMAGE_URL}${imageUrl}` }
 
   return { imageUrl }
-
 }

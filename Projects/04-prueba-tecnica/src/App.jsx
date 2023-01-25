@@ -41,10 +41,10 @@ export function App() {
           fact &&
           <p> {fact} </p>
         }
-        {
+        {/* {
           imageUrl &&
           <img src={imageUrl} alt={fact} />
-        }
+        } */}
       </section>
     </main>
   )

@@ -32,10 +32,18 @@ Recupera un hecho (fact) aleatorio de gatos de la primera API y muestra una imag
 
   src/App.jsx 
 
+# Tests 
+- Playwright
+  npm init playwright@latest
+
+  playwright.config.js => playwright.config.cjs
+  test => import
+  npx playwright test
+  
 # Ideas
 - Hay que utilizar dos estados, uno depende del otro
 - Codificar hasta que funcione
 - Refactorizar
 - Test (el más importante es el test end-to-end)
 - Busquedas: mdn... separar (para buscar la documentación)
-- Primero reslover el "happy path" y luego ponerse con la gestión de errores
+- Primero reslover el "happy path" y luego ponerse con la gestión de errores (handling de errores)
