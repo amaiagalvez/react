@@ -1,4 +1,4 @@
-import { URL_CAT_FACTS } from './const.js'
+import { CAT_ENDPOINT_RANDOM_FACT } from './const.js'
 
 // export const getRandomFact = () => {
 //   return fetch(URL_CAT_FACTS)
@@ -11,9 +11,8 @@ import { URL_CAT_FACTS } from './const.js'
 // }
 
 export const getRandomFact = async () => {
-  const res = await fetch(URL_CAT_FACTS)
+  const res = await fetch(CAT_ENDPOINT_RANDOM_FACT)
   const data = await res.json()
   const { fact } = data
-
   return fact
 }
