@@ -3,8 +3,8 @@ import './App.css'
 
 export function App() {
   // para tener un Estado de la aplicación
-  const [fact, setFact] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const [fact, setFact] = useState()
+  const [imageUrl, setImageUrl] = useState()
 
   const URL_CAT_FACTS = 'https://catfact.ninja/fact'
 
@@ -21,21 +21,25 @@ export function App() {
       .then(res => res.json())
       .then(data => {
         const { fact } = data
-        // const firstTreeWords = fact.split(' ').slice(0, 3).join(' ') // recuperar las tres primeras palabras
-        // const firstTreeWordsBis = fact.split(' ', 3) // recuperar las tres primeras palabras
-        const firstWord = fact.split(' ')[0] // recuperar la primera palabra
-
-        // setFact(firstWord)
         setFact(fact)
-
-        fetch(`https://pixabay.com/api/?key=15343816-9870b0db29149adf58f25a37c&q=${firstWord}`)
-          .then(res => res.json())
-          .then(response => {
-            setImageUrl(response.hits[0].previewURL)
-          })
       })
   }, [])
   // solo poner dependencias que pueden cambiar, entonces se ejecutará cada vez que cambie la dependencia
+
+  useEffect(() => {
+    if (!fact) return
+
+    // const firstTreeWords = fact.split(' ').slice(0, 3).join(' ') // recuperar las tres primeras palabras
+    // const firstTreeWordsBis = fact.split(' ', 3) // recuperar las tres primeras palabras
+    const firstWord = fact.split(' ')[0] // recuperar la primera palabra
+
+    fetch(`https://pixabay.com/api/?key=15343816-9870b0db29149adf58f25a37c&q=${firstWord}`)
+      .then(res => res.json())
+      .then(response => {
+        setImageUrl(response.hits[0].previewURL)
+      })
+  }, [fact])
+  // este solo se ejecutará cuando fact cambie
 
   return (
     <main style={{ width: '80%', display: 'flex', flexDirection: 'column', placeItems: 'center', maxWith: '800px', margin: '0 auto', fontFamily: 'system-ui' }}>
