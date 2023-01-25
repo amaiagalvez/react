@@ -1,0 +1,1 @@
+export const URL_CAT_FACTS = 'https://catfact.ninja/fact'
