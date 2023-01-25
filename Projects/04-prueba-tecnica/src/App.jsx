@@ -17,7 +17,7 @@ export function App() {
   */
 
   const handdleClick = async () => {
-    const newFact = await getRandomFact(setFact)
+    const newFact = await getRandomFact()
     setFact(newFact)
   }
 
@@ -26,6 +26,7 @@ export function App() {
     // fetch - devuelta una promesa, obtenemos la respuesta y cogemos lo que nos hace falta del json actualizando el estado
 
     getRandomFact().then(newFact => setFact(newFact))
+    // getRandomFact().then(setFact) es lo mismo
 
     // .catch((err) => {
     //   // por defecto entra cuando hay un error en la petición
@@ -36,6 +37,8 @@ export function App() {
   // solo poner dependencias que pueden cambiar, entonces se ejecutará cada vez que cambie la dependencia
 
   useEffect(() => {
+    console.log('Fact: ', fact)
+
     if (!fact) return
 
     // const firstTreeWords = fact.split(' ').slice(0, 3).join(' ') // recuperar las tres primeras palabras
@@ -45,8 +48,13 @@ export function App() {
     fetch(`https://pixabay.com/api/?key=15343816-9870b0db29149adf58f25a37c&q=${firstWord}`)
       .then(res => res.json())
       .then(response => {
-        if (!response.ok) return ''
-        setImageUrl(response.hits[0].previewURL)
+        if (!response.ok) return
+        const newImageUrl = response.hits[0].previewURL
+        setImageUrl(newImageUrl)
+        console.log('newImage', newImageUrl)
+      })
+      .catch(error => {
+        console.log(error)
       })
   }, [fact])
   // este solo se ejecutará cuando fact cambie

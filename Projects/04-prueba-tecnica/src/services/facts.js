@@ -11,11 +11,9 @@ const URL_CAT_FACTS = 'https://catfact.ninja/fact'
 // }
 
 export const getRandomFact = async () => {
-  console.log('getRandomFact')
-
   const res = await fetch(URL_CAT_FACTS)
   const data = await res.json()
   const { fact } = data
-
+  console.log('getRandomFact: ', fact)
   return fact
 }
